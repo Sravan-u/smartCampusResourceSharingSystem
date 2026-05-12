@@ -32,7 +32,7 @@ const Marketplace = () => {
     try {
       const startTime = new Date().toISOString();
       const endTime = new Date(Date.now() + 3600000).toISOString();
-      await axios.post(`http://localhost:8080/api/bookings/resource/${id}`, 
+      await axios.post(`http://localhost:8080/api/bookings/resource/${id}`,
         { startTime, endTime },
         { headers: { Authorization: `Bearer ${user.token}` } }
       );
@@ -45,10 +45,10 @@ const Marketplace = () => {
 
   const categories = ['ALL', 'BOOK', 'EQUIPMENT', 'GEAR', 'OTHER'];
 
-  const filteredResources = resources.filter(r => 
+  const filteredResources = resources.filter(r =>
     (activeCategory === 'ALL' || r.category === activeCategory) &&
     (r.title.toLowerCase().includes(search.toLowerCase()) ||
-     r.description.toLowerCase().includes(search.toLowerCase()))
+      r.description.toLowerCase().includes(search.toLowerCase()))
   );
 
   return (
@@ -62,8 +62,8 @@ const Marketplace = () => {
           <div className="relative w-full max-w-md group">
             <div className="absolute inset-0 bg-primary-600/20 blur-xl opacity-0 group-focus-within:opacity-100 transition-opacity"></div>
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary-400 transition-colors" size={20} />
-            <input 
-              type="text" 
+            <input
+              type="text"
               placeholder="Search books, gear, tools..."
               className="relative w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-4 py-4 focus:outline-none focus:border-primary-500 transition-all backdrop-blur-md"
               value={search}
@@ -78,11 +78,10 @@ const Marketplace = () => {
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`px-6 py-2.5 rounded-xl font-bold text-sm transition-all whitespace-nowrap border ${
-                activeCategory === cat 
-                ? 'bg-primary-600 border-primary-500 shadow-lg shadow-primary-600/30 text-white' 
-                : 'bg-white/5 border-white/10 text-slate-400 hover:bg-white/10 hover:text-slate-200'
-              }`}
+              className={`px-6 py-2.5 rounded-xl font-bold text-sm transition-all whitespace-nowrap border ${activeCategory === cat
+                  ? 'bg-primary-600 border-primary-500 shadow-lg shadow-primary-600/30 text-white'
+                  : 'bg-white/5 border-white/10 text-slate-400 hover:bg-white/10 hover:text-slate-200'
+                }`}
             >
               {cat}
             </button>
@@ -92,7 +91,7 @@ const Marketplace = () => {
 
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {[1,2,3,4,5,6].map(i => (
+          {[1, 2, 3, 4, 5, 6].map(i => (
             <div key={i} className="h-80 bg-white/5 animate-pulse rounded-[2.5rem] border border-white/10"></div>
           ))}
         </div>
@@ -114,27 +113,25 @@ const Marketplace = () => {
                   {resource.category}
                 </div>
               </div>
-              
+
               <div className="p-8 flex-1 flex flex-col space-y-4">
                 <div>
                   <h3 className="text-2xl font-bold mb-2 group-hover:text-primary-400 transition-colors">{resource.title}</h3>
                   <p className="text-slate-400 text-sm line-clamp-2 leading-relaxed">{resource.description}</p>
                 </div>
-                
+
                 <div className="mt-auto pt-6 flex items-center justify-between border-t border-white/5">
                   <div className="flex items-center space-x-2">
-                    <div className={`w-2 h-2 rounded-full animate-pulse ${
-                      resource.status === 'AVAILABLE' ? 'bg-green-500' : 'bg-red-500'
-                    }`}></div>
-                    <span className={`text-xs font-black uppercase tracking-widest ${
-                      resource.status === 'AVAILABLE' ? 'text-green-400' : 'text-red-400'
-                    }`}>
+                    <div className={`w-2 h-2 rounded-full animate-pulse ${resource.status === 'AVAILABLE' ? 'bg-green-500' : 'bg-red-500'
+                      }`}></div>
+                    <span className={`text-xs font-black uppercase tracking-widest ${resource.status === 'AVAILABLE' ? 'text-green-400' : 'text-red-400'
+                      }`}>
                       {resource.status}
                     </span>
                   </div>
-                  
+
                   {resource.status === 'AVAILABLE' && (
-                    <button 
+                    <button
                       onClick={() => handleBook(resource.id)}
                       className="bg-primary-600 hover:bg-primary-500 px-5 py-3 rounded-2xl text-xs font-black uppercase tracking-widest flex items-center space-x-2 transition-all shadow-lg shadow-primary-600/20 active:scale-95"
                     >
@@ -148,7 +145,7 @@ const Marketplace = () => {
           ))}
         </div>
       )}
-      
+
       {filteredResources.length === 0 && !loading && (
         <div className="text-center py-20 glass rounded-[3rem] border border-dashed border-white/10">
           <div className="bg-white/5 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">

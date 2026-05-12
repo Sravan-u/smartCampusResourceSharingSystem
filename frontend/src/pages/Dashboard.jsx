@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { Plus, CheckCircle, Clock, Award, Package, ShieldCheck, X, Share2, Trash2 } from 'lucide-react';
 
@@ -15,12 +15,8 @@ const Dashboard = () => {
     const fetchData = async () => {
       try {
         const [bookingsRes, resourcesRes] = await Promise.all([
-          axios.get('http://localhost:8080/api/bookings/my', {
-            headers: { Authorization: `Bearer ${user.token}` }
-          }),
-          axios.get('http://localhost:8080/api/resources/owned/me', {
-            headers: { Authorization: `Bearer ${user.token}` }
-          })
+          api.get('/api/bookings/my'),
+          api.get('/api/resources/owned/me')
         ]);
         setBookings(bookingsRes.data);
         setMyResources(resourcesRes.data);
@@ -30,22 +26,18 @@ const Dashboard = () => {
         setLoading(false);
       }
     };
-    fetchData();
-  }, [user.token]);
+    if (user) fetchData();
+  }, [user]);
 
   const handleAddResource = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:8080/api/resources', newResource, {
-        headers: { Authorization: `Bearer ${user.token}` }
-      });
+      await api.post('/api/resources', newResource);
       alert('Resource added successfully!');
       setShowAddModal(false);
       setNewResource({ title: '', description: '', category: 'BOOK' });
       // Refresh shared items
-      const res = await axios.get('http://localhost:8080/api/resources/owned/me', {
-        headers: { Authorization: `Bearer ${user.token}` }
-      });
+      const res = await api.get('/api/resources/owned/me');
       setMyResources(res.data);
     } catch (err) {
       alert('Failed to add resource. Try logging out and back in.');
@@ -55,9 +47,7 @@ const Dashboard = () => {
   const handleDeleteResource = async (id) => {
     if (!window.confirm('Are you sure you want to remove this item?')) return;
     try {
-      await axios.delete(`http://localhost:8080/api/resources/${id}`, {
-        headers: { Authorization: `Bearer ${user.token}` }
-      });
+      await api.delete(`/api/resources/${id}`);
       setMyResources(myResources.filter(r => r.id !== id));
       alert('Resource removed successfully');
     } catch (err) {
@@ -67,9 +57,7 @@ const Dashboard = () => {
 
   const handleComplete = async (id) => {
     try {
-      await axios.post(`http://localhost:8080/api/bookings/${id}/complete`, {}, {
-        headers: { Authorization: `Bearer ${user.token}` }
-      });
+      await api.post(`/api/bookings/${id}/complete`, {});
       alert('Booking completed! Rewards added.');
       window.location.reload();
     } catch (err) {
@@ -199,7 +187,7 @@ const Dashboard = () => {
             </div>
             <div>
               <h3 className="text-xl font-black tracking-widest text-slate-400 uppercase">Reward Points</h3>
-              <div className="text-8xl font-black text-yellow-400 drop-shadow-[0_10px_20px_rgba(250,204,21,0.3)] tabular-nums">{user.rewardPoints || 0}</div>
+              <div className="text-8xl font-black text-yellow-400 drop-shadow-[0_10px_20px_rgba(250,204,21,0.3)] tabular-nums">{user?.rewardPoints || 0}</div>
             </div>
             <div className="pt-8 border-t border-white/5 space-y-4 text-left">
               <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Quick Tips</p>
