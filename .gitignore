@@ -1,0 +1,31 @@
+# Java
+target/
+*.class
+*.jar
+*.war
+*.ear
+.mvn/
+.metadata/
+.project
+.settings/
+.classpath
+.factorypath
+
+# Node/React
+node_modules/
+dist/
+dist-ssr/
+*.local
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# System
+.DS_Store
+Thumbs.db
+h2_db/
+*.log
